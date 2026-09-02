@@ -10,9 +10,16 @@ interface VerifyEmailPageProps {
 export default async function VerifyEmailPage({
   searchParams,
 }: VerifyEmailPageProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  let session;
+
+  try {
+    session = await auth.api.getSession({
+      headers: await headers(),
+    });
+  } catch (error) {
+    console.error("Failed to get session in verify email page:", error);
+    return redirect("/sign-in");
+  }
 
   const params = await searchParams;
   const invitationId = params.invitation as string | undefined;
@@ -22,7 +29,6 @@ export default async function VerifyEmailPage({
   }
 
   if (session?.user?.emailVerified) {
-    // Redirect to auth-callback with invitation parameter if present
     const callbackUrl = invitationId
       ? `/auth-callback?invitation=${invitationId}`
       : "/auth-callback";

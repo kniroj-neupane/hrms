@@ -1,7 +1,7 @@
-import { betterFetch } from "@better-fetch/fetch";
 import { NextResponse, type NextRequest } from "next/server";
-import { env } from "@/env";
-import { type Session } from "@/server/auth";
+import { auth, type Session } from "@/server/auth";
+
+export const runtime = "nodejs";
 
 const protectedRoutes = ["/dashboard", "/admin"];
 const authRoutes = [
@@ -26,15 +26,9 @@ export default async function authMiddleware(request: NextRequest) {
   const isOrganizationRoute = organizationRoutes.includes(pathName);
   const isAdminRoute = pathName.startsWith("/admin");
 
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: env.BETTER_AUTH_URL,
-      headers: {
-        cookie: request.headers.get("cookie") ?? "",
-      },
-    },
-  );
+  const session = (await auth.api.getSession({
+    headers: request.headers,
+  })) as Session | null;
 
   // if user is superadmin and trying to access dashboard, redirect to admin
   if (session?.user?.role === "super_admin" && pathName === "/dashboard") {
@@ -121,6 +115,6 @@ export default async function authMiddleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };

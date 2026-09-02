@@ -41,6 +41,14 @@ export const auth = betterAuth({
     admin({
       adminRoles: ["super_admin"],
       defaultRole: "user",
+      roles: {
+        user: {
+          name: "User",
+        },
+        super_admin: {
+          name: "Super Admin",
+        },
+      },
     }),
     organization({
       async sendInvitationEmail(data, _request) {

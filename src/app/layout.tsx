@@ -6,11 +6,6 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AbilityProvider } from "@/providers/ability-context";
-import {
-  ConsentManagerDialog,
-  ConsentManagerProvider,
-  CookieBanner,
-} from "@c15t/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
@@ -33,17 +28,8 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <AbilityProvider>
-            <ConsentManagerProvider
-              options={{
-                mode: "c15t",
-                backendURL: "/api/c15t",
-              }}
-            >
-              {children}
-              <Analytics />
-              <ConsentManagerDialog />
-              <CookieBanner />
-            </ConsentManagerProvider>
+            {children}
+            <Analytics />
           </AbilityProvider>
           <Toaster position="top-right" />
         </TRPCReactProvider>
