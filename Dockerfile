@@ -20,8 +20,10 @@ COPY . .
 
 # NEXT_PUBLIC_* values are inlined into the bundle at build time, so they must
 # be supplied here rather than through the runtime env file.
+# BETTER_AUTH_URL is also needed at build time because prerender imports auth.
 ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_BETTER_AUTH_URL
+ARG BETTER_AUTH_URL
 ARG NEXT_PUBLIC_R2_ENDPOINT_URL
 ARG NEXT_PUBLIC_R2_BUCKET_NAME
 ARG NEXT_PUBLIC_R2_PUBLIC_URL
@@ -29,10 +31,16 @@ ARG NEXT_PUBLIC_C15T_URL
 
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_BETTER_AUTH_URL=$NEXT_PUBLIC_BETTER_AUTH_URL
+ENV BETTER_AUTH_URL=$BETTER_AUTH_URL
 ENV NEXT_PUBLIC_R2_ENDPOINT_URL=$NEXT_PUBLIC_R2_ENDPOINT_URL
 ENV NEXT_PUBLIC_R2_BUCKET_NAME=$NEXT_PUBLIC_R2_BUCKET_NAME
 ENV NEXT_PUBLIC_R2_PUBLIC_URL=$NEXT_PUBLIC_R2_PUBLIC_URL
 ENV NEXT_PUBLIC_C15T_URL=$NEXT_PUBLIC_C15T_URL
+
+# Placeholder secret so better-auth can initialize during prerender.
+# Real secret comes from the runtime env file on the VPS.
+ENV BETTER_AUTH_SECRET=build-time-placeholder-not-used-in-production
+ENV DATABASE_URL=postgresql://placeholder:placeholder@localhost:5432/placeholder
 
 # Server-side secrets are only present at runtime; see src/env.js.
 ENV SKIP_ENV_VALIDATION=1

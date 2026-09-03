@@ -26,6 +26,7 @@ jobs:
             --cache-from registry2.siddharthahospitality.com/hrms:latest \
             --build-arg NEXT_PUBLIC_APP_URL="${{ secrets.PROD_NEXT_PUBLIC_APP_URL }}" \
             --build-arg NEXT_PUBLIC_BETTER_AUTH_URL="${{ secrets.PROD_NEXT_PUBLIC_BETTER_AUTH_URL }}" \
+            --build-arg BETTER_AUTH_URL="${{ secrets.PROD_BETTER_AUTH_URL }}" \
             --build-arg NEXT_PUBLIC_R2_ENDPOINT_URL="${{ secrets.PROD_NEXT_PUBLIC_R2_ENDPOINT_URL }}" \
             --build-arg NEXT_PUBLIC_R2_BUCKET_NAME="${{ secrets.PROD_NEXT_PUBLIC_R2_BUCKET_NAME }}" \
             --build-arg NEXT_PUBLIC_R2_PUBLIC_URL="${{ secrets.PROD_NEXT_PUBLIC_R2_PUBLIC_URL }}" \

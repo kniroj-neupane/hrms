@@ -19,6 +19,8 @@ import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
+  baseURL: env.BETTER_AUTH_URL?.trim().replace(/^["']|["']$/g, ""),
+  secret: env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: schema,

@@ -11,7 +11,7 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string().min(1, {
       message: "BETTER_AUTH_SECRET must be set",
     }),
-    BETTER_AUTH_URL: z.string().url(),
+    BETTER_AUTH_URL: z.string().trim().url(),
     // Optional until email / R2 are configured in production.
     RESEND_API_KEY: z.string().min(1).optional(),
     EMAIL_FROM: z.string().email().optional(),
@@ -41,12 +41,12 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(),
-    NEXT_PUBLIC_R2_ENDPOINT_URL: z.string().url().optional(),
+    NEXT_PUBLIC_APP_URL: z.string().trim().url(),
+    NEXT_PUBLIC_BETTER_AUTH_URL: z.string().trim().url(),
+    NEXT_PUBLIC_R2_ENDPOINT_URL: z.string().trim().url().optional(),
     NEXT_PUBLIC_R2_BUCKET_NAME: z.string().min(1).optional(),
-    NEXT_PUBLIC_R2_PUBLIC_URL: z.string().url().optional(),
-    NEXT_PUBLIC_C15T_URL: z.string().url().optional(),
+    NEXT_PUBLIC_R2_PUBLIC_URL: z.string().trim().url().optional(),
+    NEXT_PUBLIC_C15T_URL: z.string().trim().url().optional(),
   },
 
   /**
