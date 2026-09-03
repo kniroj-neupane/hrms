@@ -80,8 +80,7 @@ export function InvitationLandingPage({
   useEffect(() => {
     if (
       session?.user &&
-      invitationQuery.data &&
-      session.user.email === invitationQuery.data.email &&
+      session.user.email === invitationQuery.data?.email &&
       !isProcessing
     ) {
       // Auto-accept the invitation for authenticated users with matching email

@@ -44,7 +44,7 @@ export function ForgotPasswordForm({
   });
 
   const handleForgotPassword = async (values: ForgotPasswordSchemaType) => {
-    await authClient.forgetPassword(
+    await authClient.requestPasswordReset(
       {
         email: values.email,
         redirectTo: "/reset-password",

@@ -12,27 +12,20 @@ export const env = createEnv({
       message: "BETTER_AUTH_SECRET must be set",
     }),
     BETTER_AUTH_URL: z.string().url(),
-    RESEND_API_KEY: z.string().min(1, {
-      message: "RESEND_API_KEY must be set",
-    }),
-    EMAIL_FROM: z.string().email({
-      message: "EMAIL_FROM must be a valid email address",
-    }),
+    // Optional until email / R2 are configured in production.
+    RESEND_API_KEY: z.string().min(1).optional(),
+    EMAIL_FROM: z.string().email().optional(),
     EMAIL_VERIFICATION_CALLBACK_URL: z
       .string()
       .url()
       .default("http://localhost:3000/api/auth/callback/email-verification"),
-    ORGANIZATION_INVITATION_CALLBACK_URL: z.string().url(),
+    ORGANIZATION_INVITATION_CALLBACK_URL: z.string().url().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
 
-    R2_ACCESS_KEY_ID: z.string().min(1, {
-      message: "R2_ACCESS_KEY_ID must be set",
-    }),
-    R2_SECRET_ACCESS_KEY: z.string().min(1, {
-      message: "R2_SECRET_ACCESS_KEY must be set",
-    }),
+    R2_ACCESS_KEY_ID: z.string().min(1).optional(),
+    R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
     UPSTASH_REDIS_REST_URL: z.string().url(),
     UPSTASH_REDIS_REST_TOKEN: z.string().min(1, {
       message: "UPSTASH_REDIS_REST_TOKEN must be set",
@@ -59,11 +52,9 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(),
-    NEXT_PUBLIC_R2_ENDPOINT_URL: z.string().url(),
-    NEXT_PUBLIC_R2_BUCKET_NAME: z.string().min(1, {
-      message: "R2_BUCKET_NAME must be set",
-    }),
-    NEXT_PUBLIC_R2_PUBLIC_URL: z.string().url(),
+    NEXT_PUBLIC_R2_ENDPOINT_URL: z.string().url().optional(),
+    NEXT_PUBLIC_R2_BUCKET_NAME: z.string().min(1).optional(),
+    NEXT_PUBLIC_R2_PUBLIC_URL: z.string().url().optional(),
     NEXT_PUBLIC_C15T_URL: z.string().url(),
   },
 

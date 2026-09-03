@@ -10,6 +10,10 @@ export const generateR2Url = (path?: string | null) => {
     return path;
   }
 
+  if (!env.NEXT_PUBLIC_R2_ENDPOINT_URL || !env.NEXT_PUBLIC_R2_BUCKET_NAME) {
+    return;
+  }
+
   return `${env.NEXT_PUBLIC_R2_ENDPOINT_URL}/${env.NEXT_PUBLIC_R2_BUCKET_NAME}/${path}`;
 };
 

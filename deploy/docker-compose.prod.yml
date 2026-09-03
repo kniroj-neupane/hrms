@@ -1,0 +1,21 @@
+services:
+  hrms:
+    image: ${HRMS_IMAGE:-registry2.siddharthahospitality.com/hrms:latest}
+    container_name: hrms
+    restart: unless-stopped
+    env_file:
+      - /root/envs/hrms.env
+    ports:
+      - "3050:3000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

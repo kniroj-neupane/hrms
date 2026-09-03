@@ -1,4 +1,4 @@
-import { groqModel } from "@/lib/server/ai-models";
+import { getGroqModel } from "@/lib/server/ai-models";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createLeaveRequestSchema } from "@/modules/leaves/schemas";
 import { TRPCError } from "@trpc/server";
@@ -18,7 +18,7 @@ export class AIService {
       ["human", "{text}"],
     ]);
 
-    const structuredLlm = groqModel.withStructuredOutput(
+    const structuredLlm = getGroqModel().withStructuredOutput(
       createLeaveRequestSchema,
       {
         name: "createLeaveRequest",
@@ -91,7 +91,7 @@ export class AIService {
       ["human", "Resume: {resume}\n\nJob: {job}"],
     ]);
 
-    const structuredScreeningLlm = groqModel.withStructuredOutput(
+    const structuredScreeningLlm = getGroqModel().withStructuredOutput(
       z.object({
         matchScore: z.number().min(0).max(100).describe("Percentage match of the resume with the job description. Higher the score, better the match."),
         confidence: z.number().min(0).max(100).describe("Confidence level in the match score between 1-100. Higher the confidence, more reliable the match."),

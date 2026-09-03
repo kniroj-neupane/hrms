@@ -6,7 +6,22 @@ import { ResetPasswordEmailTemplate } from "@/modules/email-templates/reset-pass
 import { ChangeEmailVerificationTemplate } from "@/modules/email-templates/change-email-verification";
 import { EmployeeInvitationEmail } from "@/modules/email-templates/employee-invitation";
 
-export const resend = new Resend(env.RESEND_API_KEY);
+// Constructed lazily: Resend throws on a missing key at construction, and
+// `next build` imports this module while collecting page data, before any
+// runtime secrets exist.
+let resendClient: Resend | undefined;
+
+const getEmailConfig = () => {
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) {
+    throw new Error(
+      "Email is not configured. Set RESEND_API_KEY and EMAIL_FROM.",
+    );
+  }
+  return {
+    resend: (resendClient ??= new Resend(env.RESEND_API_KEY)),
+    from: env.EMAIL_FROM,
+  };
+};
 
 export const sendVerificationEmail = async ({
   email,
@@ -15,8 +30,9 @@ export const sendVerificationEmail = async ({
   email: string;
   verificationUrl: string;
 }) => {
+  const { resend, from } = getEmailConfig();
   return await resend.emails.send({
-    from: env.EMAIL_FROM,
+    from,
     to: [email],
     subject: "Verify your Email address",
     html: await render(
@@ -32,8 +48,9 @@ export const sendResetPasswordEmail = async ({
   email: string;
   verificationUrl: string;
 }) => {
+  const { resend, from } = getEmailConfig();
   return await resend.emails.send({
-    from: env.EMAIL_FROM,
+    from,
     to: [email],
     subject: "Reset Password Link",
     react: ResetPasswordEmailTemplate({ inviteLink: verificationUrl }),
@@ -47,8 +64,9 @@ export const sendChangeEmailVerification = async ({
   email: string;
   verificationUrl: string;
 }) => {
+  const { resend, from } = getEmailConfig();
   return await resend.emails.send({
-    from: env.EMAIL_FROM,
+    from,
     to: [email],
     subject: "Reset Password Link",
     react: ChangeEmailVerificationTemplate({ inviteLink: verificationUrl }),
@@ -66,8 +84,9 @@ export const sendOrganizationInvitationEmail = async ({
   orgName: string;
   inviteId?: string;
 }) => {
+  const { resend, from } = getEmailConfig();
   return await resend.emails.send({
-    from: env.EMAIL_FROM,
+    from,
     to: [email],
     subject: "Organization Invitation",
     react: EmployeeInvitationEmail({

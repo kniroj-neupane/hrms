@@ -9,5 +9,9 @@ export const getFileAbsoluteURI = (path?: string | null) => {
     return path;
   }
 
+  if (!env.NEXT_PUBLIC_R2_PUBLIC_URL) {
+    return path;
+  }
+
   return `${env.NEXT_PUBLIC_R2_PUBLIC_URL}/${path}`;
 };

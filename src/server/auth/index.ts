@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { db } from "../db";
 import * as schema from "../db/schema";
 import { admin } from "better-auth/plugins";
+import { adminAc, userAc } from "better-auth/plugins/admin/access";
 import {
   sendChangeEmailVerification,
   sendOrganizationInvitationEmail,
@@ -42,12 +43,8 @@ export const auth = betterAuth({
       adminRoles: ["super_admin"],
       defaultRole: "user",
       roles: {
-        user: {
-          name: "User",
-        },
-        super_admin: {
-          name: "Super Admin",
-        },
+        user: userAc,
+        super_admin: adminAc,
       },
     }),
     organization({
@@ -69,7 +66,7 @@ export const auth = betterAuth({
   user: {
     changeEmail: {
       enabled: true,
-      sendChangeEmailVerification: async ({ newEmail, url }, _request) => {
+      sendChangeEmailConfirmation: async ({ newEmail, url }) => {
         const { error } = await sendChangeEmailVerification({
           email: newEmail,
           verificationUrl: url,

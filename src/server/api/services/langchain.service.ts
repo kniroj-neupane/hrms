@@ -4,7 +4,7 @@ import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { type Document } from "@langchain/core/documents";
-import { groqModel } from "@/lib/server/ai-models";
+import { getGroqModel } from "@/lib/server/ai-models";
 import cuid2 from "@paralleldrive/cuid2";
 import { LangChainAdapter } from "ai";
 import {
@@ -160,7 +160,7 @@ export class LangchainService {
     ]);
 
     const historyAwareRetriever = await createHistoryAwareRetriever({
-      llm: groqModel,
+      llm: getGroqModel(),
       retriever,
       rephrasePrompt: contextualizeQPrompt,
     });
@@ -172,7 +172,7 @@ export class LangchainService {
     ]);
 
     const questionAnswerChain = await createStuffDocumentsChain({
-      llm: groqModel,
+      llm: getGroqModel(),
       prompt: qaPrompt,
     });
 

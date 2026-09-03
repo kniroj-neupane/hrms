@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn
+
+# Next.js
+.next
+out
+
+# Git / IDE
+.git
+.gitignore
+.github
+.vscode
+.idea
+*.md
+!README.md
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Desktop launcher build artifacts
+build
+dist
+HRMSLauncher.spec
+run_hrms_launcher.py
+
+# One-off local seeding scripts
+.tmp-create-hr-user.mjs
+create-founder-hr-users.mjs
+create-role-users.mjs
+start-database.sh
+
+# Misc
+.DS_Store
+*.pem
+*.log
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Deploy artifacts (used on the VPS, not inside the image)
+deploy

@@ -36,7 +36,7 @@ export default async function authMiddleware(request: NextRequest) {
   }
 
   // If trying to access admin routes without super_admin role
-  if (isAdminRoute && (!session || session.user.role !== "super_admin")) {
+  if (isAdminRoute && session?.user.role !== "super_admin") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

@@ -137,7 +137,7 @@ export const protectedProcedure = t.procedure
   .use(isAuthed);
 
 const isSuperAdminAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user || ctx.session.user.role !== "super_admin") {
+  if (ctx.session?.user?.role !== "super_admin") {
     throw new TRPCError({ code: "FORBIDDEN" });
   }
 
