@@ -26,22 +26,13 @@ export const env = createEnv({
 
     R2_ACCESS_KEY_ID: z.string().min(1).optional(),
     R2_SECRET_ACCESS_KEY: z.string().min(1).optional(),
-    UPSTASH_REDIS_REST_URL: z.string().url(),
-    UPSTASH_REDIS_REST_TOKEN: z.string().min(1, {
-      message: "UPSTASH_REDIS_REST_TOKEN must be set",
-    }),
-    GROQ_API_KEY: z.string().min(1, {
-      message: "GROQ_API_KEY must be set",
-    }),
-    PINECONE_API_KEY: z.string().min(1, {
-      message: "PINECONE_API_KEY must be set",
-    }),
-    PINECONE_INDEX: z.string().min(1, {
-      message: "PINECONE_INDEX must be set",
-    }),
-    OPENAI_API_KEY: z.string().min(1, {
-      message: "OPENAI_API_KEY must be set",
-    }),
+    // Optional until Redis / AI are configured in production.
+    UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+    GROQ_API_KEY: z.string().min(1).optional(),
+    PINECONE_API_KEY: z.string().min(1).optional(),
+    PINECONE_INDEX: z.string().min(1).optional(),
+    OPENAI_API_KEY: z.string().min(1).optional(),
   },
 
   /**

@@ -1,10 +1,17 @@
 import { env } from "@/env";
 import { Redis } from "@upstash/redis";
 
-export const redisClient = new Redis({
-  url: env.UPSTASH_REDIS_REST_URL,
-  token: env.UPSTASH_REDIS_REST_TOKEN,
-});
+let redisClient: Redis | undefined;
+
+const getRedisClient = () => {
+  if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) {
+    return undefined;
+  }
+  return (redisClient ??= new Redis({
+    url: env.UPSTASH_REDIS_REST_URL,
+    token: env.UPSTASH_REDIS_REST_TOKEN,
+  }));
+};
 
 interface CacheConfig {
   ttl?: number;
@@ -27,10 +34,16 @@ export async function cache<T>(
   config: CacheConfig = {},
 ): Promise<T> {
   const { ttl = 3600, forceFresh = false } = config;
+  const client = getRedisClient();
+
+  // No Redis configured — always hit the data source.
+  if (!client) {
+    return getData();
+  }
 
   try {
     if (!forceFresh) {
-      const cached = await redisClient.get<T>(key);
+      const cached = await client.get<T>(key);
       if (cached !== null) return cached;
     }
 
@@ -39,7 +52,7 @@ export async function cache<T>(
       throw new Error("getData returned null/undefined");
     }
 
-    await redisClient.set(key, fresh, { ex: ttl });
+    await client.set(key, fresh, { ex: ttl });
     return fresh;
   } catch (error) {
     throw new CacheError(`Cache operation failed for key: ${key}`, error);
@@ -47,18 +60,24 @@ export async function cache<T>(
 }
 
 export async function invalidateCache(key: string): Promise<void> {
+  const client = getRedisClient();
+  if (!client) return;
+
   try {
-    await redisClient.del(key);
+    await client.del(key);
   } catch (error) {
     throw new CacheError(`Failed to invalidate cache for key: ${key}`, error);
   }
 }
 
 export async function invalidatePattern(pattern: string): Promise<void> {
+  const client = getRedisClient();
+  if (!client) return;
+
   try {
-    const keys = await redisClient.keys(pattern);
+    const keys = await client.keys(pattern);
     if (keys.length > 0) {
-      await redisClient.del(...keys);
+      await client.del(...keys);
     }
   } catch (error) {
     throw new CacheError(

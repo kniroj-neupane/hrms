@@ -1,6 +1,5 @@
-import { env } from "@/env";
 import { getOpenAIEmbeddings } from "@/lib/server/ai-models";
-import { initPinecone } from "@/lib/server/pinecone";
+import { getPineconeIndexName, initPinecone } from "@/lib/server/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
 import { TRPCError } from "@trpc/server";
 import { type Document } from "@langchain/core/documents";
@@ -9,7 +8,7 @@ export class PineconeService {
   static async removeDocument({ attachmentId }: { attachmentId: string }) {
     const pinecone = await initPinecone();
 
-    return pinecone.index(env.PINECONE_INDEX).deleteMany({
+    return pinecone.index(getPineconeIndexName()).deleteMany({
       attachmentId: {
         $eq: attachmentId,
       },
@@ -21,7 +20,7 @@ export class PineconeService {
 
     const openAIEmbeddings = getOpenAIEmbeddings();
 
-    const pineconeIndex = (await pinecone).Index(env.PINECONE_INDEX);
+    const pineconeIndex = (await pinecone).Index(getPineconeIndexName());
 
     // todo: add namespace
     const vectorStore = await PineconeStore.fromDocuments(
@@ -50,7 +49,7 @@ export class PineconeService {
 
     const openAIEmbeddings = getOpenAIEmbeddings();
 
-    const pineconeIndex = (await pinecone).Index(env.PINECONE_INDEX);
+    const pineconeIndex = (await pinecone).Index(getPineconeIndexName());
 
     const vectorStore = await PineconeStore.fromExistingIndex(
       openAIEmbeddings,
