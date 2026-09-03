@@ -40,7 +40,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    nextCookies(),
     admin({
       adminRoles: ["super_admin"],
       defaultRole: "user",
@@ -64,6 +63,7 @@ export const auth = betterAuth({
         }
       },
     }),
+    nextCookies(),
   ],
   user: {
     changeEmail: {
