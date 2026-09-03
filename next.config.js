@@ -19,10 +19,14 @@ const config = {
     ],
   },
   async rewrites() {
+    const c15tUrl = env.NEXT_PUBLIC_C15T_URL ?? process.env.NEXT_PUBLIC_C15T_URL;
+    if (!c15tUrl) {
+      return [];
+    }
     return [
       {
         source: "/api/c15t/:path*",
-        destination: `${env.NEXT_PUBLIC_C15T_URL}/:path*`,
+        destination: `${c15tUrl}/:path*`,
       },
     ];
   },

@@ -55,7 +55,7 @@ export const env = createEnv({
     NEXT_PUBLIC_R2_ENDPOINT_URL: z.string().url().optional(),
     NEXT_PUBLIC_R2_BUCKET_NAME: z.string().min(1).optional(),
     NEXT_PUBLIC_R2_PUBLIC_URL: z.string().url().optional(),
-    NEXT_PUBLIC_C15T_URL: z.string().url(),
+    NEXT_PUBLIC_C15T_URL: z.string().url().optional(),
   },
 
   /**
